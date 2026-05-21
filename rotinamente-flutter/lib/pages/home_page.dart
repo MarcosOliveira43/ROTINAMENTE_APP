@@ -10,8 +10,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const int _startSeconds = 60;
-  int _secondsRemaining = _startSeconds;
+  int _selectedMinutes = 1;
+
+  int get _startSeconds => _selectedMinutes * 60;
+  int _secondsRemaining = 60;
   Timer? _timer;
   bool _isRunning = false;
   bool _hasTaskCompleted = false;
@@ -198,7 +200,47 @@ class _HomePageState extends State<HomePage> {
             borderRadius: BorderRadius.circular(24),
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Text(
+                'Duração do timer',
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 8),
+              DropdownButtonFormField<int>(
+                initialValue: _selectedMinutes,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                items: const [1, 2, 3, 5, 10, 15, 20, 30]
+                    .map(
+                      (minutes) => DropdownMenuItem(
+                        value: minutes,
+                        child: Text(
+                          '$minutes minuto${minutes == 1 ? '' : 's'}',
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: _isRunning
+                    ? null
+                    : (value) {
+                        if (value == null) return;
+                        setState(() {
+                          _selectedMinutes = value;
+                          _secondsRemaining = _startSeconds;
+                        });
+                      },
+              ),
+              const SizedBox(height: 24),
               Stack(
                 alignment: Alignment.center,
                 children: [

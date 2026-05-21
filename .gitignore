@@ -1,0 +1,12 @@
+# Node dependencies
+node_modules/
+
+# Environment files
+.env
+
+# Flutter temporary files
+.dart_tool/
+build/
+
+# Editor settings
+.vscode/
